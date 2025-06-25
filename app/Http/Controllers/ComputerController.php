@@ -14,9 +14,10 @@ class ComputerController extends Controller
      */
     public function index()
     {
-        $computers=Computer::all();
+        // $computers= Computer::included()->findOrFail(2);
+        $computers = Computer::all();
+        // $computers=Computer::included()->filter()->get();
         return response()->json($computers);
-
     }
 
     /**
@@ -32,19 +33,23 @@ class ComputerController extends Controller
      */
     public function store(Request $request)
     {
-      $request->validate(['number' => 'required|max:255','brand'=>'required|max:255']);
-      $computers=Computer::create($request->all());
-      return response()->json($computers);
+               $request->validate([
+            'name' => 'required|max:255',
+        ]);
 
+
+
+        $computer = Computer::create($request->all());
+        return response()->json($computer);
     }
-
     /**
      * Display the specified resource.
      */
     public function show($id)
     {
-         $computers=Computer::findOrFail($id);
-         return response()->json($computers);
+
+        $computer = Computer::findOrFail($id);
+        return response()->json($computer);
     }
 
     /**
@@ -63,7 +68,7 @@ class ComputerController extends Controller
     public function update(UpdateComputerRequest $request, Computer $computer)
     {
         $computer->update($request->all());
-        return response()->json($computer);
+        return $computer;
     }
 
     /**
@@ -72,6 +77,7 @@ class ComputerController extends Controller
     public function destroy(Computer $computer)
     {
         $computer->delete();
-        return response()->json(['message' => 'Computer deleted successfully.']);
+        return response()->json(['mensaje' => 'Computador eliminado.']);
     }
 }
+
